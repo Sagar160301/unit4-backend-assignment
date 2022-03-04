@@ -1,23 +1,20 @@
 
 const express = require('express')
-const app = express();
+const app = express()
+const book = require('./data.json')
+console.log(book)
 
-// app.use(logger)
-
-
-
-app.get("/user", logger("sagar"), (req, res) => {
-    res.send("collect your data")
+app.get("/books", allBooks, (req, res, next) => {
+    console.log("Fetching all books")
+    return res.send(book)
 })
 
-function logger(req, res, next) {
-    if (arguments === "sagar") {
-        next();
-    }
+function allBooks(req, res, next) {
+    next()
 }
 
-app.listen("5000", () => {
-    console.log("listen the port 5000")
-})
 
-console.log("sagar")
+
+app.listen("5901", () => {
+    console.log("it is the port number 5901")
+})
