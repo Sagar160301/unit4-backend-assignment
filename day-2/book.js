@@ -2,11 +2,11 @@
 const express = require('express')
 const app = express()
 
-const book = require("./data")
+const book = require("./data.json")
 console.log(book)
 
 app.get("/books", (req, res) => {
-    res.send(JSON.stringify(book))
+    res.send(book)
     res.end()
 })
 
