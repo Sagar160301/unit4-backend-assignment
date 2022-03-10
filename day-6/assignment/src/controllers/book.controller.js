@@ -9,13 +9,20 @@ const Author = require('../models/authors.model')
 const Book = require('../models/books.model')
 
 const crudController = require("./crud.cotroller")
+const res = require('express/lib/response')
 
 // crud operration for book 
 
-app.get("/", async (req, res) => {
+app.get("", async (req, res) => {
     try {
-        const book = await Book.find().lean().exec()
-        res.send(book)
+        const books = await Book.find().populate({
+            path: "section_id",
+            select: ["sectionName"]
+        }).populate({
+            path: "author_id",
+            select: ["first_name", "last_name"]
+        }).lean().exec()
+        res.send(books)
     }
     catch (err) {
         res.send({ message: err.message })
@@ -26,7 +33,13 @@ app.get("/", async (req, res) => {
 app.post("", crudController(Book).post)
 app.get("/:id", async (req, res) => {
     try {
-        const book = await Book.findById(req.params.id).lean().exec()
+        const book = await Book.findById(req.params.id).populate({
+            path: "section_id",
+            select: ["sectionName"]
+        }).populate({
+            path: "author_id",
+            select: ["first_name", "last_name"]
+        }).lean().exec()
         return res.status(200).send(book)
     }
     catch (err) {
@@ -39,7 +52,13 @@ app.get("/:id", async (req, res) => {
 
 app.get("/:id/section", async (req, res) => {
     try {
-        const books = await Book.find({ section_id: req.params.id }).lean().exec()
+        const books = await Book.find({ section_id: req.params.id }).populate({
+            path: "section_id",
+            select: ["sectionName"]
+        }).populate({
+            path: "author_id",
+            select: ["first_name", "last_name"]
+        }).lean().exec()
         return res.status(201).send(books)
     }
     catch (err) {
@@ -50,7 +69,13 @@ app.get("/:id/section", async (req, res) => {
 app.get("/:id/author", async (req, res) => {
     try {
 
-        const books = await Book.find({ author_id: req.params.id }).lean().exec()
+        const books = await Book.find({ author_id: req.params.id }).populate({
+            path: "section_id",
+            select: ["sectionName"]
+        }).populate({
+            path: "author_id",
+            select: ["first_name", "last_name"]
+        }).lean().exec()
         res.status(201).send(books)
     }
     catch (err) {
@@ -67,15 +92,7 @@ app.patch("/:id", async (req, res) => {
         return res.status(500).send({ message: err.message })
     }
 })
-app.delete("/:id", async (req, res) => {
-    try {
-        const book = await Book.findByIdAndDelete(req.params.id).lean().exec()
-        return res.status(201).send(book)
-    }
-    catch (err) {
-        return res.status(500).send({ message: err.message })
-    }
-})
+app.delete("/:id", crudController(Book).del)
 
 
 module.exports = app

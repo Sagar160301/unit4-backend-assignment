@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 
 const app = express()
 
-app.use(express.json())
+// app.use(express.json())
 
 const connect = () => {
     return mongoose.connect("mongodb+srv://Sagar:Sagar@cluster0.d57qd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")

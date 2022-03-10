@@ -11,13 +11,13 @@ const crudController = require('./crud.cotroller')
 
 //crud for section
 
-app.get("/", async (req, res) => {
+app.get("", async (req, res) => {
     try {
         const sections = await Section.find().lean().exec()
-        return res.status(201).send(sections)
+        res.send(sections)
     }
     catch (err) {
-        res.status(500).send({ message: err.message })
+        res.send({ message: err.message })
     }
 })
 
@@ -34,15 +34,8 @@ app.patch("/:id", async (req, res) => {
         res.status(500).send({ message: err.message })
     }
 })
-app.delete("/:id", async (req, res) => {
-    try {
-        const section = await Section.findByIdAndDelete(req.params.id).lean().exec()
-        res.status(201).send(section)
-    }
-    catch (err) {
-        res.send({ message: err.message })
-    }
-})
 
+
+app.delete("/:id", crudController(Section).del)
 
 module.exports = app
