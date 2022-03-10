@@ -1,0 +1,17 @@
+
+
+const post = (model) => async (req, res) => {
+    try {
+        const item = await model.create(req.body)
+        return res.status(200).send(item)
+    }
+    catch (err) {
+        res.status(500).send({ message: err.message })
+    }
+}
+
+module.exports = (model) => {
+    return {
+        post: post(model)
+    }
+}

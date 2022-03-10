@@ -1,0 +1,48 @@
+
+const express = require('express')
+const app = express()
+const Section = require('../models/sections.model')
+
+const Author = require('../models/authors.model')
+
+const Book = require('../models/books.model')
+
+const crudController = require('./crud.cotroller')
+
+//crud for section
+
+app.get("/", async (req, res) => {
+    try {
+        const sections = await Section.find().lean().exec()
+        return res.status(201).send(sections)
+    }
+    catch (err) {
+        res.status(500).send({ message: err.message })
+    }
+})
+
+app.post("", crudController(Section).post)
+
+
+app.patch("/:id", async (req, res) => {
+    try {
+
+        const section = await Section.findByIdAndUpdate(req.params.id, req.body, { new: true }).lean().exec()
+        res.send(section)
+    }
+    catch (err) {
+        res.status(500).send({ message: err.message })
+    }
+})
+app.delete("/:id", async (req, res) => {
+    try {
+        const section = await Section.findByIdAndDelete(req.params.id).lean().exec()
+        res.status(201).send(section)
+    }
+    catch (err) {
+        res.send({ message: err.message })
+    }
+})
+
+
+module.exports = app
