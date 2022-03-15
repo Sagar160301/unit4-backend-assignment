@@ -23,6 +23,7 @@ app.get("/authors", checkPermission("author"), (req, res, next) => {
 
 
 function checkPermission(result) {
+
     return function (req, res, next) {
         if (result == "librarian") {
             req.path = req.path;
@@ -41,6 +42,7 @@ function checkPermission(result) {
 
 
 function logger(req, res, next) {
+    console.log(req.path)
     req.path = req.path
     next()
 }

@@ -100,7 +100,9 @@ app.post("/users", async (req, res) => {
 app.get("/users/:id", async (req, res) => {
     try {
         const user = await User.findById(req.params.id).lean().exec()
+
         res.status(200).send(user)
+        // console.log(user)
     }
     catch (err) {
         res.send({ message: err.message })

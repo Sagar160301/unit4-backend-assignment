@@ -10,6 +10,7 @@ const Book = require('../models/books.model')
 
 const crudController = require("./crud.cotroller")
 const res = require('express/lib/response')
+const req = require('express/lib/request')
 
 // crud operration for book 
 
@@ -96,3 +97,5 @@ app.delete("/:id", crudController(Book).del)
 
 
 module.exports = app
+
+
