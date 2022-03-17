@@ -5,7 +5,6 @@ const { body, validationResult } = require("express-validator");
 
 const User = require("../models/user.models");
 
-
 const router = express.Router();
 
 router.post(
@@ -47,6 +46,7 @@ router.post(
     .withMessage("Password is required")
     .custom((value) => {
       const passw = /^(?=.*\d)(?=.*[a-z])(?=.*[^a-zA-Z0-9])(?!.*\s).{7,15}$/;
+      // [^a-zA-Z0-9] for this we can also write [^W]
       if (!value.match(passw)) {
         throw new Error("Password must be strong");
       }
@@ -71,8 +71,7 @@ router.post(
       const errors = validationResult(req);
       console.log({ errors });
       if (!errors.isEmpty()) {
-
-        // it return the array containing objeect thats why we write errors.array 
+        // it return the array containing objeect thats why we write errors.array
         return res.status(400).send({ errors: errors.array() });
       }
 
