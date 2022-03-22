@@ -17,10 +17,12 @@ const storage = multer.diskStorage({
 const fileFilter = (req, file, callback) => {
   // The function should call `callback` with a boolean
   // to indicate if the file should be accepted
-  if (file.mimetype === "image/png" || file.mimetype === "image/jpg") {
+  if (file.mimetype == "image/png" || file.mimetype == "image/jpeg") {
+    console.log(req.file);
     // To accept the file pass `true`, like so:
     callback(null, true);
   } else {
+    console.log("Helllo");
     // To reject this file pass `false`, like so:
     callback(null, false);
   }
@@ -30,7 +32,7 @@ const uploads = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 1024 * 1024 * 3,
+    fileSize: 1024 * 1024 * 15,
   },
 });
 
