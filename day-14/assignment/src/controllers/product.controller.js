@@ -23,19 +23,41 @@ router.post("", async (req, res) => {
 // get method for getting all data
 router.get("/", async (req, res) => {
   try {
-    // get all the products from the from redis
-    client.get("products", async (err, allProduct) => {
-      // checking the availability for the prooducts in redis
-      if (allProduct) {
-        res.send(JSON.parse(allProduct));
-      } else {
-        // get the data from the database
-        let products = await Product.find({}).lean().exec();
-        // set the products on redis
-        client.set("products", JSON.stringify(products));
-        res.status(500).send(products);
-      }
-    });
+    const page = req.query.page;
+    const pageSize = req.query.pageSize;
+    const skip = Math.ceil((page - 1) * pageSize);
+    if (page != null && pageSize != null) {
+      client.get(`products.${page}.${pageSize}`, async (err, AllProduct) => {
+        if (AllProduct) {
+          res.send(JSON.parse(AllProduct));
+        } else {
+          const productAll = await Product.find({})
+            .skip(skip)
+            .limit(pageSize)
+            .lean()
+            .exec();
+          client.set(
+            `products.${page}.${pageSize}`,
+            JSON.stringify(productAll)
+          );
+          res.send(productAll);
+        }
+      });
+    } else {
+      // get all the products from the from redis
+      client.get("products", async (err, allProduct) => {
+        // checking the availability for the prooducts in redis
+        if (allProduct) {
+          res.send(JSON.parse(allProduct));
+        } else {
+          // get the data from the database
+          let products = await Product.find({}).lean().exec();
+          // set the products on redis
+          client.set("products", JSON.stringify(products));
+          res.status(500).send(products);
+        }
+      });
+    }
   } catch (error) {
     res.send({ get_message: error.message });
   }
