@@ -26,6 +26,7 @@ router.get("/", async (req, res) => {
 // it is the use of upload middleware
 router.post("/", upload.single("profilePic"), async (req, res) => {
   try {
+    console.log(req.file.path);
     const user = await User.create({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
