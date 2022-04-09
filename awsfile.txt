@@ -1,0 +1,16 @@
+1  what is cloud-tech ?
+2 what is pioneer cloud tech ?
+
+
+3 ports are logical door or get in your server.	
+
+4 chaniging IP address -----   click  security groups -- security group id --  edit enbound rules  ----  go to SSH  and click on my ip
+
+5  range of IPv4 is  0.0.0.0  to 255.255.255.255
+
+
+6 install nodejs  -- curl -fsSL https://deb.nodesource.com/serup_17.x | sudo  -E bash -     /// refer to documentation   40.50 min
+
+7 checking node  node click enter    or npm -v for version
+
+8 git --version for git 
